@@ -37,20 +37,32 @@ Orm dbcontext = new Orm();
 
 #region Delete
 
+//var db = new Orm();
+
+
+
+//db.Delete(
+//    "Students",
+//    "Id=@Id",
+//    new Dictionary<string, object>
+//    {
+//                { "Id", 2 }
+//    }
+//);
+
+
+//db.Delete("dbo.Teachers1");
+
+#endregion
+
+#region SearchData
+
 var db = new Orm();
 
+var results = db.Search("Students", "Name", "Fuad");
 
-
-db.Delete(
-    "Students",
-    "Id=@Id",
-    new Dictionary<string, object>
-    {
-                { "Id", 2 }
-    }
-);
-
-
-db.Delete("dbo.Teachers1");
-    
+foreach (var row in results)
+{
+    Console.WriteLine($"{row["Id"]} - {row["Name"]} {row["Surname"]}");
+}
 #endregion

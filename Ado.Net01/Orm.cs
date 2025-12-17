@@ -84,7 +84,7 @@ public class Orm
             else
             {
                 string sql = $"DELETE FROM {tableName} WHERE {whereClause}";
-            
+
                 using (SqlCommand cmd = new SqlCommand(sql, conn))
                 {
                     if (whereParams != null)
@@ -101,7 +101,28 @@ public class Orm
     }
 
 
-
-
-
+    public List<Dictionary<string, object>> Search(string tableName, string searchColumn, string searchValue)
+    {
+        var results = new List<Dictionary<string, object>>();
+        using (SqlConnection conn = new SqlConnection(_connectionString))
+        {
+            conn.Open();
+            string sql = $"SELECT * FROM {tableName} WHERE {searchColumn} LIKE @Search";
+            using (SqlCommand cmd = new SqlCommand(sql, conn))
+            {
+                cmd.Parameters.AddWithValue("@Search", $"%{searchValue}%");
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var row = new Dictionary<string, object>();
+                        for (int i = 0; i < reader.FieldCount; i++)
+                            row[reader.GetName(i)] = reader.GetValue(i);
+                        results.Add(row);
+                    }
+                }
+            }
+            return results;
+        }
+    }
 }
