@@ -67,6 +67,39 @@ public class Orm
     }
 
 
+    public void Delete(string tableName, string whereClause = null, Dictionary<string, object> whereParams = null)
+    {
+        using (SqlConnection conn = new SqlConnection(_connectionString))
+        {
+            conn.Open();
+
+            if (string.IsNullOrWhiteSpace(whereClause))
+            {
+                string sql = $"DROP TABLE {tableName}";
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            else
+            {
+                string sql = $"DELETE FROM {tableName} WHERE {whereClause}";
+            
+                using (SqlCommand cmd = new SqlCommand(sql, conn))
+                {
+                    if (whereParams != null)
+                    {
+                        foreach (var p in whereParams)
+                            cmd.Parameters.AddWithValue("@" + p.Key, p.Value ?? DBNull.Value);
+                    }
+                    cmd.ExecuteNonQuery();
+                    int rowsAffected = cmd.ExecuteNonQuery();
+                    Console.WriteLine($"Rows affected: {rowsAffected}");
+                }
+            }
+        }
+    }
+
 
 
 
