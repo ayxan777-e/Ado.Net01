@@ -26,8 +26,6 @@ public class Orm
 
     }
 
-
-
     public void UpdateData(string tableName, Dictionary<string, object> data, string whereClause, Dictionary<string, object> whereParams)
     {
         // Table yoxlaması (istəyə görə)
@@ -66,7 +64,6 @@ public class Orm
         }
     }
 
-
     public void Delete(string tableName, string whereClause = null, Dictionary<string, object> whereParams = null)
     {
         using (SqlConnection conn = new SqlConnection(_connectionString))
@@ -99,7 +96,6 @@ public class Orm
             }
         }
     }
-
 
     public List<Dictionary<string, object>> Search(string tableName, string searchColumn, string searchValue)
     {
@@ -149,5 +145,30 @@ public class Orm
         }
 
         return row;
+    }
+
+
+    public List<Dictionary<string, object>> SelectAll(string tableName)
+    {
+        var results = new List<Dictionary<string, object>>();
+        using (SqlConnection conn = new SqlConnection(_connectionString))
+        {
+            conn.Open();
+            string sql = $"SELECT * FROM {tableName}";
+            using (SqlCommand cmd = new SqlCommand(sql, conn))
+            {
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var row = new Dictionary<string, object>();
+                        for (int i = 0; i < reader.FieldCount; i++)
+                            row[reader.GetName(i)] = reader.GetValue(i);
+                        results.Add(row);
+                    }
+                }
+            }
+            return results;
+        }
     }
 }

@@ -68,20 +68,38 @@ Orm dbcontext = new Orm();
 #endregion
 
 
+#region GetById
+
+//Dictionary<string, object> result = dbcontext.GetByID("Students", "Id", 1);
+
+//if (result == null)
+//{
+//    Console.WriteLine("There is no any information by Id");
+//}
+//else
+//{
+//    Console.WriteLine("Informations are:");
+//    foreach (var item in result)
+//    {
+//        Console.WriteLine($"{item.Key} : {item.Value}");
+//    }
+//}
+
+#endregion
+
+#region SelectAll
 
 
-Dictionary<string, object> result = dbcontext.GetByID("Students", "Id", 1);
+var allStudents = dbcontext.SelectAll("Students");
 
-if (result == null)
+foreach (var student in allStudents)
 {
-    Console.WriteLine("There is no any information by Id");
-}
-else
-{
-    Console.WriteLine("Informations are:");
-    foreach (var item in result)
+    Console.WriteLine("Student Info:");
+    foreach (var item in student)
     {
         Console.WriteLine($"{item.Key} : {item.Value}");
     }
+    Console.WriteLine("-------------------");
 }
+#endregion
 
