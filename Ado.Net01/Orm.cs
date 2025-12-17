@@ -125,4 +125,29 @@ public class Orm
             return results;
         }
     }
+
+    public Dictionary<string, object> GetByID(string tableName, string idColumn, object idValue)
+    {
+        Dictionary<string, object> row = null;
+        using (SqlConnection conn = new SqlConnection(_connectionString))
+        {
+            conn.Open();
+            string sql = $"SELECT * FROM {tableName} WHERE {idColumn} = @Id";
+            using (SqlCommand cmd = new SqlCommand(sql, conn))
+            {
+                cmd.Parameters.AddWithValue("@Id", idValue);
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        row = new Dictionary<string, object>();
+                        for (int i = 0; i < reader.FieldCount; i++)
+                            row[reader.GetName(i)] = reader.GetValue(i);
+                    }
+                }
+            }
+        }
+
+        return row;
+    }
 }

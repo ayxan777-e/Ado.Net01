@@ -57,12 +57,31 @@ Orm dbcontext = new Orm();
 
 #region SearchData
 
-var db = new Orm();
+//var db = new Orm();
 
-var results = db.Search("Students", "Name", "Fuad");
+//var results = db.Search("Students", "Name", "Fuad");
 
-foreach (var row in results)
-{
-    Console.WriteLine($"{row["Id"]} - {row["Name"]} {row["Surname"]}");
-}
+//foreach (var row in results)
+//{
+//    Console.WriteLine($"{row["Id"]} - {row["Name"]} {row["Surname"]}");
+//}
 #endregion
+
+
+
+
+Dictionary<string, object> result = dbcontext.GetByID("Students", "Id", 1);
+
+if (result == null)
+{
+    Console.WriteLine("There is no any information by Id");
+}
+else
+{
+    Console.WriteLine("Informations are:");
+    foreach (var item in result)
+    {
+        Console.WriteLine($"{item.Key} : {item.Value}");
+    }
+}
+
