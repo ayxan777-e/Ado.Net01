@@ -46,7 +46,7 @@ db.Delete(
     "Id=@Id",
     new Dictionary<string, object>
     {
-                { "Id", 3 }
+                { "Id", 2 }
     }
 );
 
